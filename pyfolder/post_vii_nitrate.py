@@ -53,32 +53,33 @@ def comps_dic():
     return comps_dic, new_comps2
 
 def get_compNames(self):
-    comps, new_comps2 = comps_dic()
-    APEXMOD_path_dict = self.dirs_and_paths()
-    wd = APEXMOD_path_dict['MODFLOW']
-    # find number of species
-    for filename in glob.glob(wd + "/*.btn"):            
-        with open(os.path.join(wd, filename), "r") as f:
-            lines = f.readlines()
-    for num, line in enumerate(lines, 1):
-        if line.startswith("'NCOMP,"):
-            lNumComp = num
-        if line.startswith("'SPECIES"):
-            lNumSpecies = num
-    data = [i.replace('\n', '').split() for i in lines]
-    nComp = data[lNumComp][0]
-    compNams = []
-    for i in range(lNumSpecies, lNumSpecies+ int(nComp)):
-        compNams.append(data[i][0].replace("'", ""))
-    fullnams = []
-    for i in compNams:
-        for j in comps.keys():
-            if i == j:
-                val = comps.get(j)
-                fullnams.append('{} ({})'.format(j, val))
-    fullnams = ["Select Solute"] + fullnams
-    self.dlg.comboBox_solutes.clear()
-    self.dlg.comboBox_solutes.addItems(fullnams)
+    if self.dlg.groupBox_export_solutes.isChecked():
+        comps, new_comps2 = comps_dic()
+        APEXMOD_path_dict = self.dirs_and_paths()
+        wd = APEXMOD_path_dict['MODFLOW']
+        # find number of species
+        for filename in glob.glob(wd + "/*.btn"):            
+            with open(os.path.join(wd, filename), "r") as f:
+                lines = f.readlines()
+        for num, line in enumerate(lines, 1):
+            if line.startswith("'NCOMP,"):
+                lNumComp = num
+            if line.startswith("'SPECIES"):
+                lNumSpecies = num
+        data = [i.replace('\n', '').split() for i in lines]
+        nComp = data[lNumComp][0]
+        compNams = []
+        for i in range(lNumSpecies, lNumSpecies+ int(nComp)):
+            compNams.append(data[i][0].replace("'", ""))
+        fullnams = []
+        for i in compNams:
+            for j in comps.keys():
+                if i == j:
+                    val = comps.get(j)
+                    fullnams.append('{} ({})'.format(j, val))
+        fullnams = ["Select Solute"] + fullnams
+        self.dlg.comboBox_solutes.clear()
+        self.dlg.comboBox_solutes.addItems(fullnams)
 
 
 def read_mf_nOflayers(self):
@@ -152,52 +153,56 @@ def create_rt3d_shps(self):
 
 # NOTE: percolation in sub
 def create_rt3d_perc_shps(self):
-    APEXMOD_path_dict = self.dirs_and_paths()
-    stdate, eddate = self.define_sim_period()
-    wd = APEXMOD_path_dict['MODFLOW']
-    startDate = stdate.strftime("%m-%d-%Y")
-    # Create apexmf_results tree inside 
-    root = QgsProject.instance().layerTreeRoot()
-    if root.findGroup("apexmf_results"):
-        apexmf_results = root.findGroup("apexmf_results")
-    else:
-        apexmf_results = root.insertGroup(0, "apexmf_results")
-    input1 = QgsProject.instance().mapLayersByName("sub (APEX)")[0]
-    provider = input1.dataProvider()
-    comp = self.dlg.comboBox_solutes.currentText().replace('(', '').replace(')', '').strip().split()[1].lower()
-    if self.dlg.radioButton_rt3d_d.isChecked():
-        name = "rt3d_{}_perc_day".format(comp)
-    elif self.dlg.radioButton_rt3d_m.isChecked():
-        name = "rt3d_{}_perc_mon".format(comp)
-    elif self.dlg.radioButton_rt3d_y.isChecked():
-        name = "rt3d_{}_perc_year".format(comp)
-    name_ext = name + ".shp"
-    output_dir = APEXMOD_path_dict['apexmf_shps']
-    # Check if there is an exsting mf_head shapefile
-    if not any(lyr.name() == (name) for lyr in list(QgsProject.instance().mapLayers().values())):
-        mf_hd_shapfile = os.path.join(output_dir, name_ext)
-        QgsVectorFileWriter.writeAsVectorFormat(
-            input1, mf_hd_shapfile,
-            "utf-8", input1.crs(), "ESRI Shapefile")
-        layer = QgsVectorLayer(mf_hd_shapfile, '{0}'.format(name), 'ogr')
-        # Put in the group
+    if (self.dlg.radioButton_rt3d_d.isChecked() or
+        self.dlg.radioButton_rt3d_m.isChecked() or
+        self.dlg.radioButton_rt3d_y.isChecked()
+        ):
+        APEXMOD_path_dict = self.dirs_and_paths()
+        stdate, eddate = self.define_sim_period()
+        wd = APEXMOD_path_dict['MODFLOW']
+        startDate = stdate.strftime("%m-%d-%Y")
+        # Create apexmf_results tree inside 
         root = QgsProject.instance().layerTreeRoot()
-        apexmf_results = root.findGroup("apexmf_results")
-        QgsProject.instance().addMapLayer(layer, False)
-        apexmf_results.insertChildNode(0, QgsLayerTreeLayer(layer))
+        if root.findGroup("apexmf_results"):
+            apexmf_results = root.findGroup("apexmf_results")
+        else:
+            apexmf_results = root.insertGroup(0, "apexmf_results")
+        input1 = QgsProject.instance().mapLayersByName("sub (APEX)")[0]
+        provider = input1.dataProvider()
+        comp = self.dlg.comboBox_solutes.currentText().replace('(', '').replace(')', '').strip().split()[1].lower()
+        if self.dlg.radioButton_rt3d_d.isChecked():
+            name = "rt3d_{}_perc_day".format(comp)
+        elif self.dlg.radioButton_rt3d_m.isChecked():
+            name = "rt3d_{}_perc_mon".format(comp)
+        elif self.dlg.radioButton_rt3d_y.isChecked():
+            name = "rt3d_{}_perc_year".format(comp)
+        name_ext = name + ".shp"
+        output_dir = APEXMOD_path_dict['apexmf_shps']
+        # Check if there is an exsting mf_head shapefile
+        if not any(lyr.name() == (name) for lyr in list(QgsProject.instance().mapLayers().values())):
+            mf_hd_shapfile = os.path.join(output_dir, name_ext)
+            QgsVectorFileWriter.writeAsVectorFormat(
+                input1, mf_hd_shapfile,
+                "utf-8", input1.crs(), "ESRI Shapefile")
+            layer = QgsVectorLayer(mf_hd_shapfile, '{0}'.format(name), 'ogr')
+            # Put in the group
+            root = QgsProject.instance().layerTreeRoot()
+            apexmf_results = root.findGroup("apexmf_results")
+            QgsProject.instance().addMapLayer(layer, False)
+            apexmf_results.insertChildNode(0, QgsLayerTreeLayer(layer))
 
-        input2 = QgsProject.instance().mapLayersByName(name)[0]
-        fields = input2.dataProvider()
-        fdname = [
-                    fields.fields().indexFromName(field.name()) for field in fields.fields()
-                    if not field.name() == 'Subbasin']
-        fields.deleteAttributes(fdname)
-        input2.updateFields()
-        msgBox = QMessageBox()
-        msgBox.setWindowIcon(QtGui.QIcon(':/APEXMOD/pics/am_icon.png'))
-        msgBox.setWindowTitle("Created!")
-        msgBox.setText("'{}' layer has been created in 'apexmf_results' group!".format(name))
-        msgBox.exec_()
+            input2 = QgsProject.instance().mapLayersByName(name)[0]
+            fields = input2.dataProvider()
+            fdname = [
+                        fields.fields().indexFromName(field.name()) for field in fields.fields()
+                        if not field.name() == 'Subbasin']
+            fields.deleteAttributes(fdname)
+            input2.updateFields()
+            msgBox = QMessageBox()
+            msgBox.setWindowIcon(QtGui.QIcon(':/APEXMOD/pics/am_icon.png'))
+            msgBox.setWindowTitle("Created!")
+            msgBox.setText("'{}' layer has been created in 'apexmf_results' group!".format(name))
+            msgBox.exec_()
 
 def read_perc_dates(self):
     APEXMOD_path_dict = self.dirs_and_paths()
@@ -228,15 +233,20 @@ def read_perc_dates(self):
     self.dlg.comboBox_rt_results_edate.setCurrentIndex(len(dateList)-1)
 
 
-
-def get_percno3_df(self):
+def get_per_sub_df(self):
+    comp = self.dlg.comboBox_solutes.currentText().replace('(', '').replace(')', '').strip().split()[1].lower()
     APEXMOD_path_dict = self.dirs_and_paths()
     stdate, eddate = self.define_sim_period()
     self.layer = QgsProject.instance().mapLayersByName("sub (APEX)")[0]
     tot_feats = self.layer.featureCount()
     wd = APEXMOD_path_dict['MODFLOW']
-    infile = "amf_apex_percno3.out"
-    y = ("APEX", "Subarea,", "NO3")
+    if comp == "nitrate":
+        infile = "amf_apex_percno3.out"
+    elif comp == "phosphorus":
+        infile = "amf_apex_percP.out"
+    
+    
+    y = ("APEX", "Subarea,", "NO3", "P")
     with open(os.path.join(wd, infile), "r") as f:
         data = [x.strip() for x in f if x.strip() and not x.strip().startswith(y)]
     data1 = [x.split()[2] for x in data]
@@ -253,19 +263,14 @@ def get_percno3_df(self):
     elif self.dlg.radioButton_rt3d_y.isChecked(): 
         df_ = df_.resample('A').mean()
         # dateList = df_.index.strftime("%Y").tolist()
-
     return df_
 
 
 def export_perc_no3(self):
-    df = get_percno3_df(self)
-
-    
+    df = get_per_sub_df(self)
     selectedSdate = self.dlg.comboBox_rt_results_sdate.currentText()
     selectedEdate = self.dlg.comboBox_rt_results_edate.currentText()
-
     df = df[selectedSdate:selectedEdate]
-
     comp = self.dlg.comboBox_solutes.currentText().replace('(', '').replace(')', '').strip().split()[1].lower()
     if self.dlg.radioButton_rt3d_d.isChecked():
         name = "rt3d_{}_perc_day".format(comp)
@@ -274,8 +279,6 @@ def export_perc_no3(self):
     elif self.dlg.radioButton_rt3d_y.isChecked():
         name = "rt3d_{}_perc_year".format(comp)
     input1 = QgsProject.instance().mapLayersByName(name)[0]
-
-
     per = 0
     self.dlg.progressBar_mf_results.setValue(0)
     for selectedDate in df.index.tolist():
@@ -317,10 +320,6 @@ def export_perc_no3(self):
     msgBox.setWindowTitle("Exported!")
     msgBox.setText("rt_nitrate_perc results were exported successfully!")
     msgBox.exec_()
-
-
-
-
 
 
 def read_mf_nitrate_dates(self):
@@ -412,7 +411,6 @@ def read_mf_nitrate_dates(self):
             msgBox.setWindowTitle("Created!")
             msgBox.setText("'{}' layer has been created in 'apexmf_results' group!".format(name))
             msgBox.exec_()
-
     elif self.dlg.radioButton_rt3d_y.isChecked():
         filename = "swatmf_out_RT_cno3_yearly"
         # Open "swatmf_out_MF_head" file

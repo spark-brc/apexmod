@@ -1638,56 +1638,56 @@ class APEXMOD(object):
         post_ix_solute_hyd.export_solute_df(self)
 
     def import_rt3d_salt_dates(self):
-        comp = self.dlg.comboBox_solutes.currentText().replace('(', '').replace(')', '').strip().split()[1].lower()
         if (
-            comp != "solute" and
-            self.dlg.radioButton_rt3d_m.isChecked() and
-            comp != "nitrate" and
-            comp != "phosphorus"
+            self.dlg.groupBox_export_solutes.isChecked() and
+            self.dlg.comboBox_solutes.currentText() != ""
             ):
-            post_viii_salt.read_salt_dates(self)
-        if (
-            (comp == "nitrate" or comp == "phosphorus") and
-            self.dlg.radioButton_rt3d_m.isChecked()
-            ):
-            post_vii_nitrate.read_rt3d_dates(self)
-            post_vii_nitrate.read_mf_nOflayers(self)
+            comp = self.dlg.comboBox_solutes.currentText().replace('(', '').replace(')', '').strip().split()[1].lower()
+            if (
+                comp != "solute" and
+                self.dlg.radioButton_rt3d_m.isChecked() and
+                comp != "nitrate" and
+                comp != "phosphorus"
+                ):
+                post_viii_salt.read_salt_dates(self)
+            if (
+                (comp == "nitrate" or comp == "phosphorus") and
+                self.dlg.radioButton_rt3d_m.isChecked()
+                ):
+                post_vii_nitrate.read_rt3d_dates(self)
+                post_vii_nitrate.read_mf_nOflayers(self)
 
     def create_rt3d_salt_shps(self):
-        comp = self.dlg.comboBox_solutes.currentText().replace('(', '').replace(')', '').strip().split()[1].lower()
         if (
-            comp != "solute" and
-            self.dlg.radioButton_rt3d_m.isChecked() and
-            self.dlg.radioButton_conc.isChecked() and
-            comp != "nitrate" and
-            comp != "phosphorus"
+            self.dlg.groupBox_export_solutes.isChecked() and
+            self.dlg.comboBox_solutes.currentText() != ""
             ):
-            post_viii_salt.create_salt_grid_shps(self) 
-        if (
-            comp != "solute" and
-            self.dlg.radioButton_rt3d_m.isChecked() and
-            self.dlg.radioButton_conc.isChecked() and
-            comp == "nitrate" or
-            comp == "phosphorus"
-            ):
-            post_vii_nitrate.create_rt3d_shps(self)
-        if (
-            comp != "solute" and
-            # self.dlg.radioButton_rt3d_m.isChecked() and
-            self.dlg.radioButton_perc.isChecked() and
-            comp == "nitrate" or
-            comp == "phosphorus"
-            ):
-            post_vii_nitrate.create_rt3d_perc_shps(self)
-            post_vii_nitrate.read_perc_dates(self)
-
-
-        # if (
-        #     self.dlg.groupBox_export_solutes.isChecked() and
-        #     self.dlg.radioButton_rt3d_m.isChecked() and
-        #     not comp == 'solute'):
-        #     post_vii_nitrate.read_mf_nOflayers(self)
-        #     post_vii_nitrate.read_mf_nitrate_dates(self)
+            comp = self.dlg.comboBox_solutes.currentText().replace('(', '').replace(')', '').strip().split()[1].lower()
+            if (
+                comp != "solute" and
+                self.dlg.radioButton_rt3d_m.isChecked() and
+                self.dlg.radioButton_conc.isChecked() and
+                comp != "nitrate" and
+                comp != "phosphorus"
+                ):
+                post_viii_salt.create_salt_grid_shps(self) 
+            if (
+                comp != "solute" and
+                self.dlg.radioButton_rt3d_m.isChecked() and
+                self.dlg.radioButton_conc.isChecked() and
+                comp == "nitrate" or
+                comp == "phosphorus"
+                ):
+                post_vii_nitrate.create_rt3d_shps(self)
+            if (
+                comp != "solute" and
+                # self.dlg.radioButton_rt3d_m.isChecked() and
+                self.dlg.radioButton_perc.isChecked() and
+                comp == "nitrate" or
+                comp == "phosphorus"
+                ):
+                post_vii_nitrate.create_rt3d_perc_shps(self)
+                post_vii_nitrate.read_perc_dates(self)
 
     def get_compNames(self):
         post_vii_nitrate.get_compNames(self)
