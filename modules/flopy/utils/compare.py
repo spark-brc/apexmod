@@ -125,7 +125,7 @@ def compare_budget(
 
     """
     try:
-        from QSWATMOD2.modules import flopy
+        from APEXMOD.modules import flopy
     except:
         msg = "flopy not available - cannot use compare_budget"
         raise ValueError(msg)
@@ -332,7 +332,7 @@ def compare_swrbudget(
 
     """
     try:
-        from QSWATMOD2.modules import flopy
+        from APEXMOD.modules import flopy
     except:
         msg = "flopy not available - cannot use compare_swrbudget"
         raise ValueError(msg)
@@ -937,7 +937,7 @@ def compare_concentrations(
 
     """
     try:
-        from QSWATMOD2.modules import flopy
+        from APEXMOD.modules import flopy
     except:
         msg = "flopy not available - cannot use compare_concs"
         raise ValueError(msg)
@@ -1165,7 +1165,7 @@ def compare_stages(
 
     """
     try:
-        from QSWATMOD2.modules import flopy
+        from APEXMOD.modules import flopy
     except:
         msg = "flopy not available - cannot use compare_stages"
         raise ValueError(msg)

@@ -8,12 +8,12 @@ be accessed by the user.
 import numpy as np
 import collections
 
-from QSWATMOD2.modules.flopy.utils.utils_def import FlopyBinaryData
-from QSWATMOD2.modules.flopy.discretization.structuredgrid import StructuredGrid
-from QSWATMOD2.modules.flopy.discretization.vertexgrid import VertexGrid
-from QSWATMOD2.modules.flopy.discretization.unstructuredgrid import UnstructuredGrid
-from QSWATMOD2.modules.flopy.utils.reference import SpatialReferenceUnstructured
-from QSWATMOD2.modules.flopy.utils.reference import SpatialReference
+from APEXMOD.modules.flopy.utils.utils_def import FlopyBinaryData
+from APEXMOD.modules.flopy.discretization.structuredgrid import StructuredGrid
+from APEXMOD.modules.flopy.discretization.vertexgrid import VertexGrid
+from APEXMOD.modules.flopy.discretization.unstructuredgrid import UnstructuredGrid
+from APEXMOD.modules.flopy.utils.reference import SpatialReferenceUnstructured
+from APEXMOD.modules.flopy.utils.reference import SpatialReference
 import warnings
 
 warnings.simplefilter('always', PendingDeprecationWarning)

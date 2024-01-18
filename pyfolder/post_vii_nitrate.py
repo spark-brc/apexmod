@@ -892,7 +892,7 @@ def cvt_vtr(self):
         img = QImage(QSize(800, 800), QImage.Format_ARGB32_Premultiplied)
         # set background color
         # bcolor = QColor(255, 255, 255, 255)
-        bcolor = QColor(255, 255, 255, 0)
+        bcolor = QColor(255, 255, 255, 1)
         img.fill(bcolor.rgba())
         # create painter
         p = QPainter()

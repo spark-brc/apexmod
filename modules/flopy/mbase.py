@@ -19,7 +19,7 @@ from shutil import which
 from subprocess import Popen, PIPE, STDOUT
 import copy
 import numpy as np
-from QSWATMOD2.modules.flopy import utils, discretization
+from APEXMOD.modules.flopy import utils, discretization
 from .version import __version__
 from .discretization.modeltime import ModelTime
 from .discretization.grid import Grid
@@ -1466,7 +1466,7 @@ class BaseModel(ModelInterface):
         >>> ml.plot()
 
         """
-        from QSWATMOD2.modules.flopy.plot import PlotUtilities
+        from APEXMOD.modules.flopy.plot import PlotUtilities
 
         axes = PlotUtilities._plot_model_helper(self, SelPackList=SelPackList,
                                                 **kwargs)

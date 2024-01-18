@@ -10,7 +10,7 @@ from inspect import getfullargspec
 from pathlib import Path
 from typing import Optional, Union
 
-from QSWATMOD2.modules import flopy
+from APEXMOD.modules import flopy
 
 from ..discretization.modeltime import ModelTime
 from ..discretization.structuredgrid import StructuredGrid
