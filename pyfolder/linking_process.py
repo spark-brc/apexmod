@@ -275,7 +275,7 @@ def delete_sub_grid_with_zero(self):
         threshold = self.dlg.horizontalSlider_ol_area.value()
         request = QgsFeatureRequest().setFilterExpression('"ol_area" < {}'.format(threshold))
     else:
-        request = QgsFeatureRequest().setFilterExpression('"ol_area" < 900')
+        request = QgsFeatureRequest().setFilterExpression('"ol_area" < 9')
     request.setSubsetOfAttributes([])
     request.setFlags(QgsFeatureRequest.NoGeometry)
     tot_feats = self.layer.featureCount()

@@ -211,34 +211,34 @@ def wt_plot_daily(self):
 
     else:
         output_wt = pd.read_csv(
-                            os.path.join(wd, "apexmf_out_MF_obs"),
+                            os.path.join(wd, "amf_MODFLOW_obs_head"),
                             delim_whitespace=True,
                             skiprows = 1,
                             names = grid_id_lst,)
-        try:
-            if self.dlg.checkBox_depthTowater.isChecked():
-                # Calculate depth to water (Simulated watertable - landsurface)
-                df = output_wt[str(grid_id)] - float(mf_obs.loc[int(grid_id)])
-                ax.set_ylabel(r'Depth to Water $[m]$', fontsize = 8)
-                ax.set_title(
-                            u'Daily Depth to watertable' + u" @ Grid id: " + grid_id, fontsize = 10,
-                            loc='left')
-            else:
-                df = output_wt[str(grid_id)]
-                ax.set_ylabel(r'Hydraulic Head $[m]$', fontsize = 8)
-                ax.set_title(
-                            u'Daily Watertable Elevation' + u" @ Grid id: " + grid_id, fontsize = 10,
-                            loc='left')
-            df.index = pd.date_range(startDate, periods=len(df))
-            ax.plot(df.index, df, c = 'dodgerblue', lw = 1, label = "Simulated")
-            ax.xaxis.set_major_formatter(mdates.DateFormatter('%b-%d\n%Y'))
-        except:
-            ax.text(.5,.5, u"Running the simulation for a warm-up period!",
-                    fontsize = 12,
-                    horizontalalignment='center',
-                    weight = 'extra bold',
-                    color = 'y',
-                    transform=ax.transAxes,)
+        # try:
+        if self.dlg.checkBox_depthTowater.isChecked():
+            # Calculate depth to water (Simulated watertable - landsurface)
+            df = output_wt[str(grid_id)] - float(mf_obs.loc[int(grid_id)])
+            ax.set_ylabel(r'Depth to Water $[m]$', fontsize = 8)
+            ax.set_title(
+                        u'Daily Depth to watertable' + u" @ Grid id: " + grid_id, fontsize = 10,
+                        loc='left')
+        else:
+            df = output_wt[str(grid_id)]
+            ax.set_ylabel(r'Hydraulic Head $[m]$', fontsize = 8)
+            ax.set_title(
+                        u'Daily Watertable Elevation' + u" @ Grid id: " + grid_id, fontsize = 10,
+                        loc='left')
+        df.index = pd.date_range(startDate, periods=len(df))
+        ax.plot(df.index.values, df.values, c = 'dodgerblue', lw = 1, label = "Simulated")
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%b-%d\n%Y'))
+        # except:
+        #     ax.text(.5,.5, u"Running the simulation for a warm-up period!",
+        #             fontsize = 12,
+        #             horizontalalignment='center',
+        #             weight = 'extra bold',
+        #             color = 'y',
+        #             transform=ax.transAxes,)
 
     plt.legend(fontsize = 8,  loc = "lower right", ncol=2, bbox_to_anchor = (1, 1)) # edgecolor="w",
     # plt.tight_layout(rect=[0,0,0.75,1])
@@ -278,7 +278,7 @@ def wt_plot_monthly(self):
                                 parse_dates=True,
                                 delimiter = "\t")
 
-        output_wt = pd.read_csv(os.path.join(wd, "apexmf_out_MF_obs"),
+        output_wt = pd.read_csv(os.path.join(wd, "amf_MODFLOW_obs_head"),
                            delim_whitespace=True,
                            skiprows = 1,
                            names = grid_id_lst,)
@@ -386,7 +386,7 @@ def wt_plot_monthly(self):
                     transform=ax.transAxes,)
                     # color = colors[i%4])
     else:
-        output_wt = pd.read_csv(os.path.join(wd, "apexmf_out_MF_obs"),
+        output_wt = pd.read_csv(os.path.join(wd, "amf_MODFLOW_obs_head"),
                            delim_whitespace=True,
                            skiprows = 1,
                            names = grid_id_lst,)
@@ -457,7 +457,7 @@ def wt_plot_annual(self):
                                 parse_dates=True,
                                 delimiter = "\t")
 
-        output_wt = pd.read_csv(os.path.join(wd, "apexmf_out_MF_obs"),
+        output_wt = pd.read_csv(os.path.join(wd, "amf_MODFLOW_obs_head"),
                            delim_whitespace=True,
                            skiprows = 1,
                            names = grid_id_lst,)
@@ -565,7 +565,7 @@ def wt_plot_annual(self):
                     transform=ax.transAxes,)
                     # color = colors[i%4])
     else:
-        output_wt = pd.read_csv(os.path.join(wd, "apexmf_out_MF_obs"),
+        output_wt = pd.read_csv(os.path.join(wd, "amf_MODFLOW_obs_head"),
                            delim_whitespace=True,
                            skiprows = 1,
                            names = grid_id_lst,)
@@ -643,7 +643,7 @@ def export_wt_daily(self):
                                 delimiter = "\t")
 
         output_wt = pd.read_csv(
-                                os.path.join(wd, "apexmf_out_MF_obs"),
+                                os.path.join(wd, "amf_MODFLOW_obs_head"),
                                 delim_whitespace=True,
                                 skiprows = 1,
                                 names = grid_id_lst,)
@@ -756,7 +756,7 @@ def export_wt_daily(self):
 
     else:
         output_wt = pd.read_csv(
-                            os.path.join(wd, "apexmf_out_MF_obs"),
+                            os.path.join(wd, "amf_MODFLOW_obs_head"),
                             delim_whitespace=True,
                             skiprows = 1,
                             names = grid_id_lst,)
@@ -848,7 +848,7 @@ def export_wt_monthly(self):
                                 parse_dates=True,
                                 delimiter = "\t")
 
-        output_wt = pd.read_csv(os.path.join(wd, "apexmf_out_MF_obs"),
+        output_wt = pd.read_csv(os.path.join(wd, "amf_MODFLOW_obs_head"),
                            delim_whitespace=True,
                            skiprows = 1,
                            names = grid_id_lst,)
@@ -961,7 +961,7 @@ def export_wt_monthly(self):
 
     else:
         output_wt = pd.read_csv(
-                            os.path.join(wd, "apexmf_out_MF_obs"),
+                            os.path.join(wd, "amf_MODFLOW_obs_head"),
                             delim_whitespace=True,
                             skiprows = 1,
                             names = grid_id_lst,)
@@ -1052,7 +1052,7 @@ def export_wt_annual(self):
                                 # delimiter = "\t"
                                 )
 
-        output_wt = pd.read_csv(os.path.join(wd, "apexmf_out_MF_obs"),
+        output_wt = pd.read_csv(os.path.join(wd, "amf_MODFLOW_obs_head"),
                            delim_whitespace=True,
                            skiprows = 1,
                            names = grid_id_lst,)
@@ -1166,7 +1166,7 @@ def export_wt_annual(self):
             msgBox.exec_()
 
     else:
-        output_wt = pd.read_csv(os.path.join(wd, "apexmf_out_MF_obs"),
+        output_wt = pd.read_csv(os.path.join(wd, "amf_MODFLOW_obs_head"),
                            delim_whitespace=True,
                            skiprows = 1,
                            names = grid_id_lst,)

@@ -1404,6 +1404,8 @@ class APEXMOD(object):
         linking_process.sub_grid(self)
         self.dlg.progressBar_sm_link.setValue(40)
         QCoreApplication.processEvents()
+
+        
         linking_process.create_sub_grid_filter(self)  # for invalid geometry 
         linking_process.delete_sub_grid_with_zero(self)  # for invalid geometry
         self.dlg.progressBar_sm_link.setValue(80)
