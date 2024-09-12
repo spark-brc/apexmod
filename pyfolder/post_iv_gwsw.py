@@ -263,6 +263,7 @@ def plot_gwsw_org(self):
 
     # Sort coordinates by row
     c_sorted = sorted(coords, key=operator.itemgetter(0))
+    c_sorted = sorted(c_sorted, key=operator.itemgetter(1), reverse=True)
 
     # Put coordinates and gwsw data in Dataframe together
     f_c = pd.DataFrame(c_sorted, columns=['x_min', 'y_min', 'x_max', 'y_max'])
@@ -468,6 +469,7 @@ def plot_gwsw(self):
 
     # Sort coordinates by row
     c_sorted = sorted(coords, key=operator.itemgetter(0))
+    c_sorted = sorted(c_sorted, key=operator.itemgetter(1), reverse=True)
 
     # Put coordinates and gwsw data in Dataframe together
     f_c = pd.DataFrame(c_sorted, columns=['x_min', 'y_min', 'x_max', 'y_max'])
@@ -596,8 +598,6 @@ def plot_gwsw(self):
             bottom=f_c.y_min,
             width=width * widthExg, align='center',
             alpha=0.7, color=colormap(my_norm(np.array(gwsw_f))), zorder=3,)    
-
-
 
     # NOTE:
     plt.savefig(os.path.join(wd, 'fig_{}.png'.format(selectedDate)), transparent=True, dpi=300)
@@ -930,6 +930,7 @@ def export_gwsw(self):
 
     # Sort coordinates by row
     c_sorted = sorted(coords, key=operator.itemgetter(0))
+    c_sorted = sorted(c_sorted, key=operator.itemgetter(1), reverse=True)
 
     # Put coordinates and gwsw data in Dataframe together
     f_c = pd.DataFrame(c_sorted, columns=['x_coord', 'y_coord', 'x_max', 'y_max'])
